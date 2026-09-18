@@ -43,8 +43,8 @@ const server = http.createServer(async (req, res) => {
     return send(res, 403, { error: `host not allowed: ${host}`, allowed: [...ALLOWED] });
   }
 
-  // کلید: header یا query (?key=)
-  const apiKey = req.headers[KEY_HEADER] || u.searchParams.get('key');
+  // کلید: اول header/query درخواست؛ اگر نبود، KEY تنظیم‌شده روی خود سرور
+  const apiKey = req.headers[KEY_HEADER] || u.searchParams.get('key') || process.env.GEMINI_API_KEY || '';
   if (!apiKey) {
     return send(res, 401, { error: 'missing x-api-key header or ?key=' });
   }
